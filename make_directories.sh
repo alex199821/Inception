@@ -11,7 +11,6 @@ echo "DB_NAME=wordpress" >> srcs/.env
 echo "DB_ROOT=rootpass" >> srcs/.env
 echo "DB_USER=wpuser" >> srcs/.env
 echo "DB_PASS=wppass" >> srcs/.env
-mkdir srcs/requirements/bonus
 mkdir srcs/requirements/mariadb
 mkdir srcs/requirements/mariadb/conf
 touch srcs/requirements/mariadb/conf/create_db.sh
