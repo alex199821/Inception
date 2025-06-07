@@ -10,6 +10,8 @@ services:
       - wordpress
     ports:
       - "443:443"
+    networks:
+      - inception
     volumes:
       - ./requirements/nginx/conf/:/etc/nginx/http.d/
       - ./requirements/nginx/tools:/etc/nginx/ssl/
@@ -26,6 +28,9 @@ services:
         DB_USER: ${DB_USER}
         DB_PASS: ${DB_PASS}
     container_name: wordpress
+    networks:
+      - inception_db
+      - inception
     depends_on:
       - mariadb
     restart: always
@@ -42,8 +47,8 @@ services:
         DB_PASS: ${DB_PASS}
         DB_ROOT: ${DB_ROOT}
     container_name: mariadb
-    ports:
-      - "3306:3306"
+    networks:
+      - inception_db
     volumes:
       - db-volume:/var/lib/mysql
     restart: always
@@ -63,5 +68,7 @@ volumes:
   
 networks:
   inception:
+      driver: bridge
+  inception_db:
       driver: bridge
   
