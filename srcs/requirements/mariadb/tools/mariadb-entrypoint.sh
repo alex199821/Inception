@@ -23,14 +23,23 @@ if [ ! -e /var/lib/mysql/.firstmount ]; then
     sleep 5
 
     cat << EOF | mysql --protocol=socket -u root
+-- Create application database and user first
 CREATE DATABASE IF NOT EXISTS \`$DB_NAME\`;
 CREATE USER IF NOT EXISTS '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';
 GRANT ALL PRIVILEGES ON \`$DB_NAME\`.* TO '$DB_USER'@'%';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '$DB_PASS' WITH GRANT OPTION;
+
+-- Set root password for localhost
+ALTER USER 'root'@'localhost' IDENTIFIED BY '$DB_PASS';
+
+-- Remove insecure remote root access
+DELETE FROM mysql.user WHERE User='root' AND Host='%';
+
 FLUSH PRIVILEGES;
 EOF
 
-    mysqladmin shutdown
+    # Shutdown using the new password
+    mysqladmin --user=root --password="$DB_PASS" shutdown
+
     touch /var/lib/mysql/.firstmount
 fi
 
