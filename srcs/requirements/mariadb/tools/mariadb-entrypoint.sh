@@ -19,8 +19,7 @@ if [ ! -e /var/lib/mysql/.firstmount ]; then
     mysql_install_db --datadir=/var/lib/mysql --skip-test-db --user=mysql --group=mysql \
         --auth-root-authentication-method=socket >/dev/null 2>/dev/null
 
-    mysqld_safe &
-    sleep 5
+    mysqld_safe
 
     cat << EOF | mysql --protocol=socket -u root
 -- Create application database and user first
